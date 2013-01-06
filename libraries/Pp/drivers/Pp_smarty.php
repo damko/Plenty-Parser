@@ -21,8 +21,22 @@ class Pp_smarty extends CI_Driver {
         $this->ci = get_instance();
         $this->ci->config->load('plentyparser');
 
-        // Require Smarty
-        require_once APPPATH."third_party/Smarty/Smarty.class.php";
+        // Require Smarty. It looks true all the loaded packages
+        foreach (get_instance()->load->get_package_paths(TRUE) as $path) {
+        	 
+        	$path .= 'libraries/Smarty/Smarty.class.php';
+        	 
+        	if(is_file($path)) {
+        		require_once $path;
+        		break;
+        	}
+        }
+        
+        if(!class_exists('Smarty')) {
+        	//TODO maybe something more elegant?
+        	echo 'I can not include Smarty.class.php';
+        	return false;
+        }
         
         // Store the Smarty library
         $this->_smarty = new Smarty();
@@ -62,7 +76,7 @@ class Pp_smarty extends CI_Driver {
         $this->_smarty->disableSecurity();
         
         // Turn on/off debug
-	$this->_smarty->debugging  = config_item('parser.smarty.debug');
+		$this->_smarty->debugging  = config_item('parser.smarty.debug');
     }
     
     /**
@@ -72,12 +86,9 @@ class Pp_smarty extends CI_Driver {
     */
     public function __call($method, $params=array())
     {
-		
-	if(!method_exists($this, $method))
-        {
-		call_user_func_array(array($this->_smarty, $method), $params);
-			
-	}
+		if(!method_exists($this, $method)) {
+			call_user_func_array(array($this->_smarty, $method), $params);	
+		}
     }
 
 	/**
@@ -101,7 +112,7 @@ class Pp_smarty extends CI_Driver {
     public function assign_var($name, $val)
     {
         // If an empty variable name
-        if (empty($name))
+        if (empty($name)))
         {
             show_error('Smarty assign var function expects a name and value for assigning variables');
         }

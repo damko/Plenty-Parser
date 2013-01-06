@@ -10,11 +10,10 @@ Plenty Parser is a driver based parser library for Codeigniter 2.1 and up. It al
 Currently this spark is not yet available on getsparks.org repositories so the best option is to do it manually
 > * create the directory sparks/plenty_parser/0.0.1
 > * clone or copy the content of this github repo in that directory
-> * create these directories in application/ :
+> * create these directories in application/ and make them writable:
 > * * cache/smarty/cached
 > * * cache/smarty/compiled
 > * * cache/twig
-> * copy in the third_party directory the Smarty and Twig folder (you can find them here https://github.com/Vheissu/Plenty-Parser/tree/master/third_party or from the official websites)
 
 When this spark will be on getsparks.org then you can use this command
 

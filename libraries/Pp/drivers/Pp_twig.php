@@ -26,9 +26,27 @@ class Pp_twig extends CI_Driver {
     {
         $this->ci = get_instance();
         
+        //It looks true all the loaded packages until the Twig folder is found
+        foreach (get_instance()->load->get_package_paths(TRUE) as $path) {
+        
+        	$path .= 'libraries/Twig';
+        
+        	if(is_dir($path)) {
+        		$twig_path = $path;
+        		break;
+        	}
+        }        
+        
+        if(!isset($twig_path)) {
+        	//TODO maybe something more elegant?
+        	echo 'I can not find the Twig folder';
+        	return false;
+        }
+                
         ini_set('include_path',
-        ini_get('include_path') . PATH_SEPARATOR . APPPATH . 'third_party/Twig');
-
+        ini_get('include_path') . PATH_SEPARATOR . $twig_path);
+        //ini_get('include_path') . PATH_SEPARATOR . APPPATH . 'third_party/Twig');
+        
         require_once (string) "Autoloader" . EXT;
 
         Twig_Autoloader::register();
