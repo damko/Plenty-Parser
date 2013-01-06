@@ -37,10 +37,10 @@ $config['parser.theme.default'] = "";
 $config['parser.twig.extension'] = ".twig";
 
 // Default template location
-$config['parser.twig.location'] = APPPATH . "views/";
+$config['parser.twig.location'] = APPPATH . "views";
 
 // Twig template caching location
-$config['parser.twig.cache_location'] = APPPATH . "cache/twig/";
+$config['parser.twig.cache_location'] = APPPATH . "cache/twig";
 
 // Debug mode turned on or off for Twig?
 $config['parser.twig.debug'] = false;
