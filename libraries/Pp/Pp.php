@@ -219,7 +219,7 @@ class Pp extends CI_Driver_Library {
         if ($driver !== '')
         {
             $this->_current_driver = trim($driver);
-        }
+        }       
         
         // Add in the extension using the default if not supplied
         if (!stripos($template, "."))
@@ -239,12 +239,26 @@ class Pp extends CI_Driver_Library {
         
         $file_not_found = false;
 
-		//if themes are enabled it looks for alternatives paths        
-        if(!is_file($template_file)) {
+		//DAM if themes or hmvc are enabled it looks for alternatives paths        
+        if(is_file($template_file)) {
         	
+        	//in the hmvc the default smarty directory keeps changing, so it's necessary to set it to the default
+        	$this->{$this->_current_driver}->set_template_dir(config_item('parser.smarty.location'));
+        	
+        } else {
         	$file_not_found = true;
         	
-        	if(is_array($this->_theme_locations) and !empty($this->_current_theme)){
+        	if(!empty($hmvc_module))
+        	{
+        		list($path, $view) = Modules::find($template, $hmvc_module, 'views/');
+        		if($path) {
+        			//$this->ci->smarty_view_path = $path;
+        			$this->{$this->_current_driver}->set_template_dir($path);
+        			$file_not_found = false;
+        		}
+        	}
+        	
+        	if($file_not_found && is_array($this->_theme_locations) and !empty($this->_current_theme)){
         		
         		foreach (array_keys($this->_theme_locations) as $theme_location){
         			
@@ -258,7 +272,7 @@ class Pp extends CI_Driver_Library {
         		}
         		
         	}
-        }
+        } 
         
         if($file_not_found){
         	echo $template . ' is not a file';
