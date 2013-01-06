@@ -1,0 +1,5 @@
+name: plentyparser
+version: 0.0.1
+compatibility: 2.1.3
+#dependencies:
+tags: ["smarty","twig"]

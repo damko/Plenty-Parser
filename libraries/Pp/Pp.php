@@ -100,7 +100,7 @@ class Pp extends CI_Driver_Library {
                 // If path isn't already in our array of paths
                 if ( !array_key_exists($path, $this->_theme_locations) )
                 {
-                    $this->_theme_locations[$path];
+                    $this->_theme_locations[$path] = '';
                 }
             }
             
@@ -182,7 +182,7 @@ class Pp extends CI_Driver_Library {
         // If path isn't already in our array of paths
         if ( !array_key_exists($location, $this->_theme_locations) )
         {
-            $this->_theme_locations[$location];
+            $this->_theme_locations[$location] = '';
         }
         
         return true;
@@ -207,10 +207,14 @@ class Pp extends CI_Driver_Library {
     * 
     * @param mixed $template
     * @param mixed $data
+	* @param string $hmvc_module  //looks into $hmvc_module to find the views folder
     * @returns void
     */
-    public function parse($template, $data = array(), $return = false, $driver = '')
+    public function parse($template, $data = array(), $return = false, $driver = '', $hmvc_module = null)
     {
+    	//loads phpgettext config
+    	if(function_exists('setupPhpGettext')) setupPhpGettext();
+    	
         // Are we setting a particular driver to render with?
         if ($driver !== '')
         {
@@ -229,6 +233,36 @@ class Pp extends CI_Driver_Library {
             {
                 show_error('No extension has been defined for the driver "'.$this->_current_driver.'". Please define one in the plentyparser.php config file.');
             }
+        }  
+
+        $template_file = config_item('parser.smarty.location') . '/' . $template;
+        
+        $file_not_found = false;
+
+		//if themes are enabled it looks for alternatives paths        
+        if(!is_file($template_file)) {
+        	
+        	$file_not_found = true;
+        	
+        	if(is_array($this->_theme_locations) and !empty($this->_current_theme)){
+        		
+        		foreach (array_keys($this->_theme_locations) as $theme_location){
+        			
+        			$tryfile = $theme_location . '/' . $this->_current_theme . '/' .$template;
+        			
+        			if(is_file($tryfile)) {
+        				$this->{$this->_current_driver}->set_template_dir($theme_location . '/' . $this->_current_theme);
+        				$file_not_found = false;
+        				break;
+        			}
+        		}
+        		
+        	}
+        }
+        
+        if($file_not_found){
+        	echo $template . ' is not a file';
+        	return false;
         }
         
         // Call the driver parse function

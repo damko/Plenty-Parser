@@ -25,13 +25,19 @@ class Pp_smarty extends CI_Driver {
         require_once APPPATH."third_party/Smarty/Smarty.class.php";
         
         // Store the Smarty library
-        $this->_smarty = new Smarty;
+        $this->_smarty = new Smarty();
         
         // Smarty config options
-        $this->_smarty->setTemplateDir(config_item('parser.smarty.location'));
-        $this->_smarty->setCompileDir(config_item('parser.smarty.compile_dir'));
-        $this->_smarty->setCacheDir(config_item('parser.smarty.cache_dir'));
-        $this->_smarty->setConfigDir(config_item('parser.smarty.config_dir'));
+        //DAM retro compatibility
+		if(isset($this->ci->smarty_view_path) && !empty($this->ci->smarty_view_path))
+		{
+			$this->_smarty->template_dir    = $this->ci->smarty_view_path;
+		} else {
+			$this->_smarty->template_dir    = config_item('parser.smarty.location');
+		}
+        $this->_smarty->compile_dir     = config_item('parser.smarty.compile_dir');
+        $this->_smarty->cache_dir       = config_item('parser.smarty.cache_dir');
+        $this->_smarty->config_dir      = config_item('parser.smarty.config_dir');
 
         // Add helper directories as plugin directories
         $this->_smarty->addPluginsDir(FCPATH . 'system/helpers/');
@@ -73,6 +79,16 @@ class Pp_smarty extends CI_Driver {
 			
 	}
     }
+
+	/**
+	* Fixes themes issues
+	*/
+    public function set_template_dir($template_dir){
+    	
+    	if(!is_string($template_dir) || empty($template_dir)) return false;
+    	
+    	$this->_smarty->template_dir = $template_dir;
+    }
     
     /**
     * Assign Var
@@ -103,7 +119,16 @@ class Pp_smarty extends CI_Driver {
     * @param mixed $return
     */
     public function parse($template, $data = array(), $return = false)
-    {        
+    {
+        //DAM Check we haven't got cached variables to use
+        if (is_array($data))
+        {
+        	if(isset($this->ci->load->_ci_cached_vars))
+        	{
+        		$data = array_merge($data, $this->ci->load->_ci_cached_vars);
+        	}
+        }
+        
         // If we have variables to assign, lets assign them
         if ($data)
         {

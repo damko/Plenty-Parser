@@ -5,9 +5,16 @@
 * @subpackage Config
 * @copyright 2011
 * @author Dwayne Charrington
+* @author Damiano Venturin
 * @license http://philsturgeon.co.uk/code/dbad-license
 * @version 1.0
 */
+
+$config_file = APPPATH . 'config/plentyparser.php';
+if(is_file($config_file)) {
+	include_once $config_file;
+	return;
+}
 
 // Default driver to render views with
 $config['parser.driver'] = "smarty";
