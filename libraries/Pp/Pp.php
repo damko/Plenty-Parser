@@ -122,10 +122,10 @@ class Pp extends CI_Driver_Library {
     {
 		
 	if(!method_exists($this, $method))
-        {
+    {
 		call_user_func_array(array($this->{$this->_current_driver}, $method), $params);
 			
-	}
+		}
     }
     
     /**
@@ -213,7 +213,9 @@ class Pp extends CI_Driver_Library {
     public function parse($template, $data = array(), $return = false, $driver = '', $hmvc_module = null)
     {
     	//loads phpgettext config
-    	if(function_exists('setupPhpGettext')) setupPhpGettext();
+    	if(function_exists('setupPhpGettext')) {
+    		setupPhpGettext();
+    	}
     	
         // Are we setting a particular driver to render with?
         if ($driver !== '')

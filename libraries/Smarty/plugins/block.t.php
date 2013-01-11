@@ -102,7 +102,12 @@ function smarty_block_t($params, $text, &$smarty)
 	}
 		
 	// gettext setup
-	T_setlocale(LC_MESSAGES, $locale);
+	if(function_exists('T_setlocale')) {
+		T_setlocale(LC_MESSAGES, $locale);
+	} else {
+		//probably gettext.inc has not been loaded
+		return $text;
+	}
 	// Set the text domain as 'messages'
 	$domain = 'messages';
 	_bindtextdomain($domain, LOCALE_DIR);

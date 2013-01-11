@@ -78,6 +78,7 @@ class Smarty_Internal_TemplateCompilerBase {
                 }
                 return true;
             }
+            //debug_point
             // call compiler
             $_compiled_code = $this->doCompile($_content);
         } while ($this->abort_and_recompile);

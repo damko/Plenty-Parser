@@ -175,7 +175,7 @@ class Smarty extends Smarty_Internal_Data {
     public $debugging = false;
     public $debugging_ctrl = 'NONE';
     public $smarty_debug_id = 'SMARTY_DEBUG';
-    public $debug_tpl = null;
+    public $debug_tpl = null; //'/var/sparks/pp/0.0.1/libraries/Smarty/debug.tpl';
     // When set, smarty does uses this value as error_reporting-level.
     public $error_reporting = null;
     // config var settings
@@ -333,6 +333,7 @@ class Smarty extends Smarty_Internal_Data {
         }
         // return rendered template
         if ((!$this->caching || $_template->resource_object->isEvaluated) && (isset($this->autoload_filters['output']) || isset($this->registered_filters['output']))) {
+        	$a = $_template->getRenderedTemplate();
             $_output = Smarty_Internal_Filter_Handler::runFilter('output', $_template->getRenderedTemplate(), $_template);
         } else {
             $_output = $_template->getRenderedTemplate();

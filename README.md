@@ -28,6 +28,8 @@ After the installation edit the file plentyparse.php in the spark config directo
 
 	$this->load->spark('pp/0.0.1');
 
+	$this->load->driver('pp');
+
 after that you can use the Plenty Parser object in the usual way
 
 	$this->pp->...

@@ -56,7 +56,7 @@ class Pp_smarty extends CI_Driver {
         // Add helper directories as plugin directories
         $this->_smarty->addPluginsDir(FCPATH . 'system/helpers/');
         $this->_smarty->addPluginsDir(APPPATH . 'helpers/');
-
+        
         // Delimiters
         $this->_smarty->left_delimiter  = config_item("parser.smarty.left.delim");
         $this->_smarty->right_delimiter = config_item("parser.smarty.right.delim");

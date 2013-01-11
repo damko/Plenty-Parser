@@ -260,6 +260,7 @@ class Smarty_Internal_Template extends Smarty_Internal_Data {
             $this->compiler_object->compileTemplate($this);
         }
         catch (Exception $e) {
+        	//debug_point
             // restore old timestamp in case of error
             if ($this->smarty->compile_locking && !$this->resource_object->isEvaluated && $saved_timestamp) {
                 touch($this->getCompiledFilepath(), $saved_timestamp);
@@ -421,6 +422,7 @@ class Smarty_Internal_Template extends Smarty_Internal_Data {
     {
         if ($this->resource_object->usesCompiler) {
             if ($this->mustCompile() && $this->compiled_template === null) {
+            	//debug_point
                 $this->compileTemplateSource();
             }
             if ($this->smarty->debugging) {
@@ -565,6 +567,7 @@ class Smarty_Internal_Template extends Smarty_Internal_Data {
             $this->isCached(false);
           }
           if (!$this->isCached) {
+          	//debug_point
             // render template (not loaded and not in cache)
             $this->renderTemplate();
           }
