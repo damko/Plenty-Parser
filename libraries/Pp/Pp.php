@@ -242,7 +242,7 @@ class Pp extends CI_Driver_Library {
         $file_not_found = false;
 
 		//DAM if themes or hmvc are enabled it looks for alternatives paths        
-        if(is_file($template_file) && is_null($hmvc_module)) {
+        if(is_file($template_file) && empty($hmvc_module)) {
         	
         	//in the hmvc the default smarty directory keeps changing, so it's necessary to set it to the default
         	$this->{$this->_current_driver}->set_template_dir(config_item('parser.smarty.location'));
